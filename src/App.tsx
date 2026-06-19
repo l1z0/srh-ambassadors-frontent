@@ -15,11 +15,12 @@ type GuestView = "home" | "login";
 type AuthedView = "dashboard" | "myClubs" | "myEvents";
 
 function AppContent() {
-  const { user } = useAuth();
+  const { user, ambassadorMode } = useAuth();
   const [guestView, setGuestView] = useState<GuestView>("home");
   const [authedView, setAuthedView] = useState<AuthedView>("dashboard");
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const isAmbassador = user?.role?.name === AMBASSADOR_ROLE_NAME;
+  const showAmbassadorDashboard = isAmbassador && ambassadorMode;
 
   return (
     <>
@@ -58,7 +59,7 @@ function AppContent() {
             <MyClubsPage />
           ) : authedView === "myEvents" ? (
             <MyEventsPage />
-          ) : isAmbassador ? (
+          ) : showAmbassadorDashboard ? (
             <AmbassadorHome />
           ) : (
             <Dashboard onSeeAllClubs={() => setAuthedView("myClubs")} />

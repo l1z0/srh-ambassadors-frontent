@@ -1,13 +1,15 @@
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { AMBASSADOR_ROLE_NAME } from "../services/strapi";
 
 type Props = {
   onClose: () => void;
 };
 
 export default function ProfileModal({ onClose }: Props) {
-  const { user, logout } = useAuth();
+  const { user, logout, ambassadorMode, setAmbassadorMode } = useAuth();
   const { locale, setLocale, t } = useLanguage();
+  const isAmbassador = user?.role?.name === AMBASSADOR_ROLE_NAME;
 
   return (
     <div className="modalOverlay" onClick={onClose}>
@@ -48,6 +50,20 @@ export default function ProfileModal({ onClose }: Props) {
               </button>
             </span>
           </div>
+          {isAmbassador && (
+            <div className="profileModalRow profileModalToggleRow">
+              <span>{t("profileModal.ambassadorMode")}</span>
+              <button
+                type="button"
+                role="switch"
+                aria-checked={ambassadorMode}
+                className={`profileModalToggle${ambassadorMode ? " on" : ""}`}
+                onClick={() => setAmbassadorMode(!ambassadorMode)}
+              >
+                <span className="profileModalToggleKnob" />
+              </button>
+            </div>
+          )}
           <div className="profileModalRow">
             <span>{t("profileModal.profile")}</span>
           </div>

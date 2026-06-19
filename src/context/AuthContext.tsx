@@ -27,6 +27,8 @@ async function fetchUserWithRole(jwt: string, fallbackUser: User): Promise<User>
 type AuthContextType = {
   user: User | null;
   token: string | null;
+  ambassadorMode: boolean;
+  setAmbassadorMode: (enabled: boolean) => void;
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
@@ -37,6 +39,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [ambassadorMode, setAmbassadorModeState] = useState(true);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("strapi_jwt");
@@ -45,7 +48,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setToken(storedToken);
       setUser(JSON.parse(storedUser));
     }
+    const storedAmbassadorMode = localStorage.getItem("ambassador_mode");
+    if (storedAmbassadorMode !== null) {
+      setAmbassadorModeState(storedAmbassadorMode === "true");
+    }
   }, []);
+
+  function setAmbassadorMode(enabled: boolean) {
+    setAmbassadorModeState(enabled);
+    localStorage.setItem("ambassador_mode", String(enabled));
+  }
 
   async function login(email: string, password: string) {
     const res = await fetch(`${STRAPI_URL}/api/auth/local`, {
@@ -90,12 +102,16 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   function logout() {
     setToken(null);
     setUser(null);
+    setAmbassadorModeState(true);
     localStorage.removeItem("strapi_jwt");
     localStorage.removeItem("strapi_user");
+    localStorage.removeItem("ambassador_mode");
   }
 
   return (
-    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+    <AuthContext.Provider
+      value={{ user, token, ambassadorMode, setAmbassadorMode, login, register, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

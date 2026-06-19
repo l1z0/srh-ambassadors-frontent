@@ -146,6 +146,7 @@ const en: Dict = {
     logout: "Log Out →",
     online: "online",
     language: "Language:",
+    ambassadorMode: "Ambassador mode",
   },
 };
 
@@ -293,6 +294,7 @@ const de: Dict = {
     logout: "Abmelden →",
     online: "online",
     language: "Sprache:",
+    ambassadorMode: "Botschafter-Modus",
   },
 };
 
