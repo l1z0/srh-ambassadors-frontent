@@ -1,0 +1,108 @@
+import { createContext, useContext, useEffect, useState } from "react";
+
+const STRAPI_URL = import.meta.env.VITE_STRAPI_BASE_URL ?? "http://localhost:1337";
+
+type User = {
+  id: number;
+  username: string;
+  email: string;
+  role?: {
+    id: number;
+    name: string;
+  };
+};
+
+async function fetchUserWithRole(jwt: string, fallbackUser: User): Promise<User> {
+  try {
+    const res = await fetch(`${STRAPI_URL}/api/users/me?populate=role`, {
+      headers: { Authorization: `Bearer ${jwt}` },
+    });
+    if (!res.ok) return fallbackUser;
+    return await res.json();
+  } catch {
+    return fallbackUser;
+  }
+}
+
+type AuthContextType = {
+  user: User | null;
+  token: string | null;
+  login: (email: string, password: string) => Promise<void>;
+  register: (username: string, email: string, password: string) => Promise<void>;
+  logout: () => void;
+};
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("strapi_jwt");
+    const storedUser = localStorage.getItem("strapi_user");
+    if (storedToken && storedUser) {
+      setToken(storedToken);
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  async function login(email: string, password: string) {
+    const res = await fetch(`${STRAPI_URL}/api/auth/local`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ identifier: email, password }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message ?? "Login failed");
+    }
+
+    const data = await res.json();
+    const fullUser = await fetchUserWithRole(data.jwt, data.user);
+    setToken(data.jwt);
+    setUser(fullUser);
+    localStorage.setItem("strapi_jwt", data.jwt);
+    localStorage.setItem("strapi_user", JSON.stringify(fullUser));
+  }
+
+  async function register(username: string, email: string, password: string) {
+    const res = await fetch(`${STRAPI_URL}/api/auth/local/register`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, email, password }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error?.message ?? "Registration failed");
+    }
+
+    const data = await res.json();
+    const fullUser = await fetchUserWithRole(data.jwt, data.user);
+    setToken(data.jwt);
+    setUser(fullUser);
+    localStorage.setItem("strapi_jwt", data.jwt);
+    localStorage.setItem("strapi_user", JSON.stringify(fullUser));
+  }
+
+  function logout() {
+    setToken(null);
+    setUser(null);
+    localStorage.removeItem("strapi_jwt");
+    localStorage.removeItem("strapi_user");
+  }
+
+  return (
+    <AuthContext.Provider value={{ user, token, login, register, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
+}

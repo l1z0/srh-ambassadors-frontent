@@ -1,0 +1,1325 @@
+:root {
+  --page-bg: #FFFEFD;
+  --card-bg: #ffffff;
+  --ink: #000000;
+  --muted: #a8b0b6;
+  --nav: #724A16;
+  --border: #000000;
+  --green: #18a053;
+  --green-bg: #f0ffe2;
+  --orange: #ff810b;
+  --orange-bg: #ffe4c1;
+  --grey: #51575c;
+  --grey-bg: #d9d9d9;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--ink);
+  font-family: "Haskoy", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.appShell {
+  min-height: 100vh;
+  display: flex;
+}
+
+.sidebar {
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: 90px;
+  border-right: 2px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #FFF4E5;
+  z-index: 5;
+  overflow: hidden;
+  transition: width 0.2s ease, background 0.2s ease;
+}
+
+.sidebar.expanded {
+  width: 260px;
+  align-items: stretch;
+  background: #FFF4E5;
+}
+
+.collapseButton {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin-top: 46px;
+  border: 0;
+  background: transparent;
+  color: var(--nav);
+  cursor: pointer;
+}
+
+.sidebar.expanded .collapseButton {
+  margin-left: 31px;
+}
+
+.collapseButton .sidebarIcon {
+  transition: transform 0.2s ease;
+}
+
+.sidebar.expanded .collapseButton .sidebarIcon {
+  transform: scaleX(-1);
+}
+
+.mainNav,
+.bottomNav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 26px;
+}
+
+.sidebar.expanded .mainNav,
+.sidebar.expanded .bottomNav {
+  align-items: stretch;
+}
+
+.mainNav {
+  margin-top: 56px;
+}
+
+.bottomNav {
+  margin-top: auto;
+  margin-bottom: 42px;
+  gap: 20px;
+}
+
+.navItem {
+  color: var(--nav);
+  display: grid;
+  place-items: center;
+  text-decoration: none;
+}
+
+.navItem.active {
+  color: var(--orange);
+}
+
+.navItem .navLabel {
+  display: none;
+}
+
+.sidebar.expanded .navItem {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  padding: 0 15px 0 31px;
+}
+
+.sidebar.expanded .navItem .navLabel {
+  display: inline-block;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.sidebarIcon {
+  display: inline-block;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.profileAvatar {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: #ffcfd1;
+}
+
+.sidebarOverlay {
+  position: fixed;
+  inset: 0;
+  left: 260px;
+  background: rgba(79, 70, 229, 0.1);
+  z-index: 4;
+  cursor: pointer;
+}
+
+.dashboard {
+  width: min(1180px, calc(100vw - 130px));
+  margin-left: 190px;
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+
+.sectionBlock h1,
+.sectionTitleRow h1 {
+  font-size: 30px;
+  line-height: 1;
+  letter-spacing: -0.5px;
+  margin: 0 0 12px;
+  font-weight: 800;
+}
+
+.nextEventCard {
+  width: 100%;
+  max-width: 900px;
+  min-height: 110px;
+  padding: 18px 24px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+}
+
+.clubNameLarge {
+  margin: 0 0 4px;
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.nextEventCard h2 {
+  margin: 0;
+  max-width: 560px;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  font-weight: 800;
+}
+
+.eventMetaLarge {
+  margin-top: 20px;
+  font-size: 16px;
+  line-height: 1.25;
+}
+
+.eventMetaLarge p {
+  margin: 0;
+}
+
+.nextEventActions {
+  min-width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 110px;
+  min-height: 38px;
+  padding: 6px 18px;
+  border: 0;
+  border-radius: 999px;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.status-registered {
+  color: var(--green);
+  background: var(--green-bg);
+}
+
+.status-register {
+  color: var(--orange);
+  background: var(--orange-bg);
+  cursor: pointer;
+}
+
+.status-waitlisted {
+  color: var(--grey);
+  background: var(--grey-bg);
+}
+
+.detailsButton {
+  border: 0;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #fff;
+  padding: 10px 18px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.eventsSection {
+  margin-top: 56px;
+}
+
+/* ── Ambassador: proposal approvals ── */
+
+.proposalCard {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px 24px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  display: flex;
+  justify-content: space-between;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.proposalLabel {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.proposalCard h2 {
+  margin: 0;
+  max-width: 460px;
+  font-size: 24px;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  font-weight: 800;
+}
+
+.proposalMeta {
+  margin-top: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.proposalMeta p {
+  margin: 0;
+}
+
+.proposalActions {
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 10px;
+}
+
+.approveProposalButton,
+.rejectProposalButton {
+  border: 0;
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+}
+
+.approveProposalButton {
+  background: var(--orange);
+  color: #fff;
+}
+
+.rejectProposalButton {
+  background: var(--card-bg);
+  border: 2px solid var(--orange);
+  color: var(--orange);
+}
+
+.approvalQueueSection {
+  margin-top: 0;
+}
+
+.approvalQueueTable {
+  max-width: 1180px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+  padding: 0 22px;
+}
+
+.approvalQueueRow {
+  min-height: 64px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 140px 160px 140px;
+  align-items: center;
+  column-gap: 16px;
+  border-bottom: 2px solid var(--border);
+  font-size: 14px;
+}
+
+.approvalQueueRow:last-child {
+  border-bottom: 0;
+}
+
+.approvalQueueHeader {
+  min-height: 44px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.approvalQueueName {
+  font-weight: 700;
+}
+
+.sectionTitleRow {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+}
+
+.seeAll {
+  color: #7f7f7f;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.eventsTable {
+  max-width: 900px;
+  border: 2px solid var(--border);
+  border-radius: 16px;
+  background: var(--card-bg);
+  padding: 0 22px;
+}
+
+.eventRow {
+  min-height: 78px;
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 130px 110px 130px;
+  align-items: center;
+  column-gap: 16px;
+  border-bottom: 2px solid var(--border);
+}
+
+.eventRow:last-child {
+  border-bottom: 0;
+}
+
+.eventNameCell h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.eventNameCell p,
+.eventDateCell span,
+.eventLocationCell span {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.eventDateCell,
+.eventLocationCell {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.eventDateCell strong,
+.eventLocationCell strong {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.eventRow.public {
+  grid-template-columns: minmax(220px, 1fr) 130px 110px;
+}
+
+.eventStatusCell {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.eventStatusCell .statusBadge {
+  min-width: 110px;
+  min-height: 38px;
+  font-size: 16px;
+}
+
+@media (max-width: 1100px) {
+  .dashboard {
+    margin-left: 110px;
+    width: calc(100vw - 140px);
+  }
+
+  .nextEventCard {
+    flex-direction: column;
+  }
+
+  .nextEventActions {
+    min-width: 0;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .eventRow {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 16px 0;
+  }
+
+  .eventStatusCell {
+    justify-content: flex-start;
+  }
+}
+
+.clubsSection {
+  margin-top: 36px;
+}
+
+.clubCards {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.clubCard {
+  position: relative;
+  width: 220px;
+  min-height: 92px;
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  background: var(--card-bg);
+  padding: 30px 14px 10px;
+}
+
+.clubCard h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.clubCard p {
+  margin: 0;
+  color: #777;
+  font-size: 12px;
+  line-height: 1.15;
+}
+
+.ownerBadge {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--page-bg);
+  color: var(--nav);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* ── My Clubs page ── */
+
+.myClubsHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.myClubsHeader h1 {
+  font-size: 30px;
+  letter-spacing: -0.5px;
+  font-weight: 800;
+  margin: 0;
+}
+
+.manageLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  background: none;
+  color: #828282;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.manageLink:hover {
+  color: var(--ink);
+}
+
+.clubFilterTabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.filterTab {
+  border: none;
+  border-radius: 999px;
+  padding: 6px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--page-bg);
+  color: #b3b3b3;
+}
+
+.filterTab.active {
+  background: var(--orange-bg);
+  color: var(--orange);
+}
+
+.myClubsList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.myClubCard {
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  background: var(--card-bg);
+}
+
+.myClubImage,
+.myClubImagePlaceholder {
+  width: 96px;
+  height: 96px;
+  border-radius: 12px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.myClubImagePlaceholder {
+  background: var(--grey-bg);
+}
+
+.myClubInfo {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.myClubInfo h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.myClubInfo p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.pendingApprovals {
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--page-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.pendingApprovalsTitle {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nav);
+}
+
+.pendingApprovalRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+
+.pendingApprovalButtons {
+  display: flex;
+  gap: 8px;
+}
+
+.approveButton,
+.rejectButton {
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.approveButton {
+  background: var(--green-bg);
+  color: var(--green);
+  border-color: var(--green);
+}
+
+.rejectButton {
+  background: var(--orange-bg);
+  color: var(--orange);
+  border-color: var(--orange);
+}
+
+.myClubActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  min-height: 56px;
+}
+
+.myClubOwnerBadge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--page-bg);
+  color: var(--nav);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.myClubPendingBadge {
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: var(--orange-bg);
+  color: var(--orange);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.viewDetailButton {
+  border: 2px solid var(--orange);
+  border-radius: 12px;
+  background: var(--card-bg);
+  color: var(--orange);
+  padding: 8px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.viewDetailButton:hover {
+  background: var(--orange-bg);
+}
+
+/* ── Login ── */
+
+.loginPage {
+  flex: 1;
+  margin-left: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.loginCard {
+  width: 100%;
+  max-width: 380px;
+  background: var(--card-bg);
+  border: 1.5px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 36px 40px 40px;
+}
+
+.loginLogo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--orange);
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 28px;
+}
+
+.loginField {
+  margin-bottom: 14px;
+}
+
+.loginField label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.loginField input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.loginField input:focus {
+  border-color: var(--orange);
+}
+
+.loginError {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #d32f2f;
+  text-align: center;
+}
+
+.loginActions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 12px;
+}
+
+.btnRegister {
+  padding: 10px 22px;
+  border: 2px solid var(--orange);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--orange);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.btnRegister:hover {
+  background: var(--orange-bg);
+}
+
+.btnLogin {
+  padding: 10px 30px;
+  border: none;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.btnLogin:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Dashboard error ── */
+
+.dashboardError {
+  background: #fff8ec;
+  border: 1.5px solid var(--orange);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.dashboardError p {
+  margin: 0 0 4px;
+}
+
+.dashboardError p:last-child {
+  margin-bottom: 0;
+}
+
+/* ── Footer ── */
+
+.siteFooter {
+  background: var(--card-bg);
+  border-top: 2px solid var(--border);
+  padding: 28px 40px 20px;
+}
+
+.footerMain {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.footerLogo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--orange);
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.footerNav {
+  display: flex;
+  gap: 28px;
+}
+
+.footerNav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.footerNav a:hover {
+  color: var(--orange);
+}
+
+.footerMeta {
+  display: flex;
+  justify-content: space-between;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid #e0e0e0;
+  padding-top: 12px;
+}
+
+/* ── Home (public landing) ── */
+
+.homePage {
+  width: min(1180px, calc(100vw - 130px));
+  margin-left: 190px;
+  padding-top: 60px;
+  padding-bottom: 80px;
+}
+
+.homeHero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 32px;
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  background: var(--card-bg);
+  margin-bottom: 40px;
+}
+
+.homeHero h1 {
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+
+.homeHero p {
+  font-size: 15px;
+  color: var(--grey);
+  margin: 0;
+  max-width: 520px;
+}
+
+@media (max-width: 1100px) {
+  .homePage {
+    margin-left: 110px;
+    width: calc(100vw - 140px);
+  }
+}
+
+/* ── Login back link ── */
+
+.loginBackLink {
+  display: block;
+  width: 100%;
+  margin: 18px auto 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.loginBackLink:hover {
+  color: var(--ink);
+}
+
+/* ── Modal overlay / Manage popover / Propose Club modal ── */
+
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modalBackLink {
+  display: block;
+  margin: 0 0 16px;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.modalBackLink:hover {
+  color: var(--ink);
+}
+
+.managePopover {
+  width: 100%;
+  max-width: 280px;
+  background: var(--card-bg);
+  border: 1.5px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 24px 24px 12px;
+}
+
+.managePopoverLink {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  background: none;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.managePopoverLink:hover {
+  color: var(--orange);
+}
+
+.proposeClubModal {
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: var(--card-bg);
+  border: 1.5px solid #e0e0e0;
+  border-radius: 18px;
+  padding: 28px 32px 32px;
+}
+
+.formField {
+  margin-bottom: 18px;
+}
+
+.formField label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.formField input,
+.formField textarea,
+.formField select {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  background: #fff;
+  outline: none;
+  font-family: inherit;
+  resize: vertical;
+  transition: border-color 0.15s;
+}
+
+.formField input:focus,
+.formField textarea:focus,
+.formField select:focus {
+  border-color: var(--orange);
+}
+
+.imageDropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 24px 16px;
+  border: 1.5px dashed #c7c7c7;
+  border-radius: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+.imageDropzone:hover {
+  border-color: var(--orange);
+}
+
+.imageDropzoneLink {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--orange);
+}
+
+.imageDropzoneHint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.imageDropzoneFileName {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.modalActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.saveDraftButton {
+  padding: 10px 22px;
+  border: 2px solid var(--border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
+.publishButton {
+  padding: 10px 30px;
+  border: none;
+  border-radius: 999px;
+  background: var(--orange);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.publishButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── My Events ── */
+
+.eventCardList {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.eventCard {
+  max-width: 900px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  padding: 32px 36px;
+  border-radius: 30px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.eventCardInfo h2 {
+  margin: 0 0 16px;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.eventCardInfo p {
+  margin: 0 0 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.eventCardActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 80px;
+}
+
+.eventOrganizerBadge {
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: var(--page-bg);
+  color: var(--nav);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.eventViewDetailButton {
+  border: none;
+  border-radius: 14px;
+  background: var(--card-bg);
+  color: var(--orange);
+  padding: 10px 22px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  border: 2px solid var(--orange);
+  transition: background 0.15s;
+}
+
+.eventViewDetailButton:hover {
+  background: var(--orange-bg);
+}
+
+/* ── Profile modal ── */
+
+.profileModal {
+  width: 100%;
+  max-width: 360px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  padding: 28px 28px 18px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  position: relative;
+}
+
+.profileModalClose {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.profileModalClose:hover {
+  color: var(--ink);
+}
+
+.profileModalHeader {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profileModalAvatar {
+  width: 64px;
+  height: 64px;
+  flex-shrink: 0;
+  border-radius: 16px;
+  background: #ffcfd1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.profileModalIdentity {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.profileModalName {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 800;
+}
+
+.profileModalStatus {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.profileModalDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--green);
+}
+
+.profileModalMenu {
+  display: flex;
+  flex-direction: column;
+}
+
+.profileModalRow {
+  width: 100%;
+  text-align: left;
+  padding: 14px 0;
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  background: none;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: default;
+}
+
+.profileModalLogout {
+  cursor: pointer;
+}
+
+.profileModalLogout:hover {
+  color: var(--orange);
+}
+
+.profileModalLangOption {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-weight: 700;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.profileModalLangOption.active {
+  color: var(--orange);
+}
