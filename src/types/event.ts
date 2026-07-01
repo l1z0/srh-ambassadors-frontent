@@ -7,6 +7,5 @@ export interface EventItem {
   eventDate: string;
   time: string;
   location: string;
-  building?: string;
   status: EventStatus;
 }

@@ -2,9 +2,14 @@ import { StatusBadge } from "./StatusBadge";
 import type { EventItem } from "../types/event";
 import { useLanguage } from "../context/LanguageContext";
 
-export default function NextEventCard({ event }: { event: EventItem }) {
+type Props = {
+  event: EventItem;
+  onViewDetail?: () => void;
+  onRegister?: () => void;
+};
+
+export default function NextEventCard({ event, onViewDetail, onRegister }: Props) {
   const { t } = useLanguage();
-  const locationStr = [event.location, event.building].filter(Boolean).join(" · ");
 
   return (
     <section className="sectionBlock">
@@ -16,13 +21,15 @@ export default function NextEventCard({ event }: { event: EventItem }) {
           <h2>{event.eventName}</h2>
           <div className="eventMetaLarge">
             <p>{event.eventDate} · {event.time}</p>
-            <p>{locationStr || t("nextEvent.locationTba")}</p>
+            <p>{event.location || t("nextEvent.locationTba")}</p>
           </div>
         </div>
 
         <div className="nextEventActions">
-          <StatusBadge status={event.status} />
-          <button className="detailsButton">{t("nextEvent.viewDetail")}</button>
+          <StatusBadge status={event.status} asButton onClick={onRegister} />
+          <button className="detailsButton desktopOnly" onClick={onViewDetail}>
+            {t("nextEvent.viewDetail")}
+          </button>
         </div>
       </article>
     </section>

@@ -6,6 +6,7 @@ type User = {
   id: number;
   username: string;
   email: string;
+  avatar?: { id: number; url: string } | null;
   role?: {
     id: number;
     name: string;
@@ -14,7 +15,7 @@ type User = {
 
 async function fetchUserWithRole(jwt: string, fallbackUser: User): Promise<User> {
   try {
-    const res = await fetch(`${STRAPI_URL}/api/users/me?populate=role`, {
+    const res = await fetch(`${STRAPI_URL}/api/users/me?populate[0]=role&populate[1]=avatar`, {
       headers: { Authorization: `Bearer ${jwt}` },
     });
     if (!res.ok) return fallbackUser;
@@ -32,6 +33,7 @@ type AuthContextType = {
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => void;
+  updateUser: (partial: Partial<User>) => void;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -108,9 +110,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.removeItem("ambassador_mode");
   }
 
+  function updateUser(partial: Partial<User>) {
+    setUser((prev) => {
+      if (!prev) return prev;
+      const next = { ...prev, ...partial };
+      localStorage.setItem("strapi_user", JSON.stringify(next));
+      return next;
+    });
+  }
+
   return (
     <AuthContext.Provider
-      value={{ user, token, ambassadorMode, setAmbassadorMode, login, register, logout }}
+      value={{ user, token, ambassadorMode, setAmbassadorMode, login, register, logout, updateUser }}
     >
       {children}
     </AuthContext.Provider>

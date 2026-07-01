@@ -38,20 +38,20 @@ export default function AmbassadorHome() {
     loadClubs();
   }, [token, locale]);
 
-  async function handleApprove(clubId: number) {
+  async function handleApprove(clubDocumentId: string) {
     setActionError(null);
     try {
-      await approveClubProposal(clubId, token);
+      await approveClubProposal(clubDocumentId, token);
       await loadClubs();
     } catch (err) {
       setActionError(err instanceof Error ? err.message : t("login.genericError"));
     }
   }
 
-  async function handleReject(clubId: number) {
+  async function handleReject(clubDocumentId: string) {
     setActionError(null);
     try {
-      await rejectClubProposal(clubId, token);
+      await rejectClubProposal(clubDocumentId, token);
       await loadClubs();
     } catch (err) {
       setActionError(err instanceof Error ? err.message : t("login.genericError"));
@@ -103,14 +103,14 @@ export default function AmbassadorHome() {
             <button
               type="button"
               className="approveProposalButton"
-              onClick={() => handleApprove(featured.id)}
+              onClick={() => handleApprove(featured.documentId)}
             >
               {t("ambassador.approve")}
             </button>
             <button
               type="button"
               className="rejectProposalButton"
-              onClick={() => handleReject(featured.id)}
+              onClick={() => handleReject(featured.documentId)}
             >
               {t("ambassador.reject")}
             </button>

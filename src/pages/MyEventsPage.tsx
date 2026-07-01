@@ -1,24 +1,42 @@
 import { useEffect, useState } from "react";
-import { getEvents, type StrapiEvent } from "../services/strapi";
+import { getClubs, getEvents, type StrapiClub, type StrapiEvent } from "../services/strapi";
 import { useAuth } from "../context/AuthContext";
 import { useLanguage } from "../context/LanguageContext";
+import { StatusBadge } from "../components/StatusBadge";
+import CreateEventModal from "../components/CreateEventModal";
 
 type FilterTab = "attending" | "pending";
 
-export default function MyEventsPage() {
+type Props = {
+  onViewEvent?: (event: StrapiEvent) => void;
+};
+
+export default function MyEventsPage({ onViewEvent }: Props) {
   const { token, user } = useAuth();
   const { locale, t } = useLanguage();
   const [events, setEvents] = useState<StrapiEvent[]>([]);
+  const [clubs, setClubs] = useState<StrapiClub[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [tab, setTab] = useState<FilterTab>("attending");
+  const [showManage, setShowManage] = useState(false);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
-  useEffect(() => {
-    getEvents(token, locale)
+  function loadEvents() {
+    return getEvents(token, locale)
       .then(setEvents)
       .catch((err) => setError(err instanceof Error ? err.message : t("login.genericError")))
       .finally(() => setLoading(false));
+  }
+
+  useEffect(() => {
+    loadEvents();
+    getClubs(token, locale)
+      .then(setClubs)
+      .catch(() => setClubs([]));
   }, [token, locale]);
+
+  const ownedClubs = clubs.filter((club) => !!user && club.owner?.id === user.id);
 
   function isOrganizer(event: StrapiEvent) {
     return !!user && event.club?.owner?.id === user.id;
@@ -35,8 +53,40 @@ export default function MyEventsPage() {
     <main className="dashboard">
       <div className="myClubsHeader">
         <h1>{t("myEventsPage.title")}</h1>
-        <span className="manageLink">{t("myEventsPage.manage")}</span>
+        {ownedClubs.length > 0 && (
+          <button type="button" className="manageLink" onClick={() => setShowManage(true)}>
+            {t("myEventsPage.manage")}
+          </button>
+        )}
       </div>
+
+      {showManage && (
+        <div className="modalOverlay" onClick={() => setShowManage(false)}>
+          <div className="managePopover" onClick={(e) => e.stopPropagation()}>
+            <button type="button" className="modalBackLink" onClick={() => setShowManage(false)}>
+              {t("common.back")}
+            </button>
+            <button
+              type="button"
+              className="managePopoverLink"
+              onClick={() => {
+                setShowManage(false);
+                setShowCreateModal(true);
+              }}
+            >
+              {t("myEventsPage.manageCreate")}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {showCreateModal && (
+        <CreateEventModal
+          ownedClubs={ownedClubs}
+          onClose={() => setShowCreateModal(false)}
+          onCreated={loadEvents}
+        />
+      )}
 
       <div className="clubFilterTabs">
         <button
@@ -79,9 +129,16 @@ export default function MyEventsPage() {
                 {isOrganizer(event) && (
                   <span className="eventOrganizerBadge">{t("myEventsPage.organizer")}</span>
                 )}
-                <button type="button" className="eventViewDetailButton">
+                <button
+                  type="button"
+                  className="eventViewDetailButton desktopOnly"
+                  onClick={() => onViewEvent?.(event)}
+                >
                   {t("myEventsPage.viewDetail")}
                 </button>
+                <span className="mobileOnly">
+                  <StatusBadge status="registered" />
+                </span>
               </div>
             </article>
           ))}

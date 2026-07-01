@@ -4,9 +4,10 @@ import { useLanguage } from "../context/LanguageContext";
 
 interface EventTableProps {
   events: EventItem[];
+  onRegister?: (id: number) => void;
 }
 
-export default function EventTable({ events }: EventTableProps) {
+export default function EventTable({ events, onRegister }: EventTableProps) {
   const { t } = useLanguage();
   return (
     <section className="sectionBlock eventsSection" aria-labelledby="upcoming-events-heading">
@@ -30,11 +31,10 @@ export default function EventTable({ events }: EventTableProps) {
 
             <div className="eventLocationCell">
               <strong>{event.location}</strong>
-              {event.building && <span>{event.building}</span>}
             </div>
 
             <div className="eventStatusCell">
-              <StatusBadge status={event.status} asButton />
+              <StatusBadge status={event.status} asButton onClick={() => onRegister?.(event.id)} />
             </div>
           </article>
         ))}

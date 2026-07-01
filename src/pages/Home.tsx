@@ -59,10 +59,7 @@ export default function Home({ onShowLogin }: { onShowLogin: () => void }) {
                   </div>
 
                   <div className="eventLocationCell">
-                    <strong>
-                      {event.location?.roomName ?? event.location?.locationName ?? t("common.tba")}
-                    </strong>
-                    {event.location?.building && <span>{event.location.building}</span>}
+                    <strong>{event.location?.locationName ?? t("common.tba")}</strong>
                   </div>
                 </article>
               );

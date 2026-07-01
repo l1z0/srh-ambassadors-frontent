@@ -165,8 +165,7 @@ a {
 .sidebarOverlay {
   position: fixed;
   inset: 0;
-  left: 260px;
-  background: rgba(79, 70, 229, 0.1);
+  background: rgba(0, 0, 0, 0.35);
   z-index: 4;
   cursor: pointer;
 }
@@ -192,9 +191,9 @@ a {
   max-width: 900px;
   min-height: 110px;
   padding: 18px 24px;
-  border: 2px solid var(--border);
   border-radius: 20px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: space-between;
   gap: 32px;
@@ -278,15 +277,19 @@ a {
   margin-top: 56px;
 }
 
+.mobileOnly {
+  display: none;
+}
+
 /* ── Ambassador: proposal approvals ── */
 
 .proposalCard {
   width: 100%;
   max-width: 900px;
   padding: 20px 24px;
-  border: 2px solid var(--border);
   border-radius: 20px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   display: flex;
   justify-content: space-between;
   gap: 32px;
@@ -347,7 +350,6 @@ a {
 
 .rejectProposalButton {
   background: var(--card-bg);
-  border: 2px solid var(--orange);
   color: var(--orange);
 }
 
@@ -357,9 +359,9 @@ a {
 
 .approvalQueueTable {
   max-width: 900px;
-  border: 2px solid var(--border);
   border-radius: 16px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   padding: 0 22px;
 }
 
@@ -403,9 +405,9 @@ a {
 
 .eventsTable {
   max-width: 900px;
-  border: 2px solid var(--border);
   border-radius: 16px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   padding: 0 22px;
 }
 
@@ -506,9 +508,9 @@ a {
   position: relative;
   width: 220px;
   min-height: 92px;
-  border: 2px solid var(--border);
   border-radius: 14px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   padding: 30px 14px 10px;
 }
 
@@ -604,9 +606,9 @@ a {
   align-items: center;
   gap: 20px;
   padding: 20px;
-  border: 2px solid var(--border);
   border-radius: 18px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
 }
 
 .myClubImage,
@@ -735,11 +737,787 @@ a {
   background: var(--orange-bg);
 }
 
+.joinButton {
+  border: none;
+  border-radius: 12px;
+  background: var(--orange);
+  color: #fff;
+  padding: 9px 18px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.joinButton:hover {
+  opacity: 0.9;
+}
+
+.joinButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Discover Clubs ── */
+
+.discoverToolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.discoverSearchWrap {
+  position: relative;
+  flex: 1;
+  max-width: 480px;
+}
+
+.discoverSearchIcon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  background-color: #828282;
+  -webkit-mask-image: url(/icons/fi-rr-search.svg);
+  mask-image: url(/icons/fi-rr-search.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.discoverSearchInput {
+  width: 100%;
+  padding: 12px 16px 12px 44px;
+  border: 2px solid var(--nav);
+  border-radius: 14px;
+  background: #f5f5f5;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+}
+
+.discoverFilterButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+}
+
+.discoverFilterIcon {
+  display: inline-block;
+  width: 22px;
+  height: 22px;
+  background-color: var(--muted);
+  -webkit-mask-image: url(/icons/fi-rr-filter.svg);
+  mask-image: url(/icons/fi-rr-filter.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+/* ── Discover Clubs filter panel ── */
+
+/* ── Edit Clubs modal ── */
+
+.editClubsModal {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 30px;
+  width: 360px;
+  padding: 44px 32px 32px;
+}
+
+.editClubsClose {
+  position: absolute;
+  top: 12px;
+  right: 20px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 0;
+}
+
+.editClubsClose:hover {
+  color: var(--orange);
+}
+
+.editClubsList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.editClubsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.editClubsRow:last-child {
+  border-bottom: none;
+}
+
+.editClubsName {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.editClubsDeleteButton {
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 8px;
+}
+
+.editClubsDeleteButton:hover {
+  color: #d32f2f;
+  background: #fff0f0;
+}
+
+.editClubsEmpty {
+  margin: 0;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.discoverFilterButton.active .discoverFilterIcon {
+  background-color: var(--orange);
+}
+
+.discoverFilterPanel {
+  position: relative;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 30px;
+  width: 340px;
+  padding: 44px 28px 28px;
+}
+
+.discoverFilterClose {
+  position: absolute;
+  top: 10px;
+  right: 18px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--ink);
+  padding: 0;
+}
+
+.discoverFilterClose:hover {
+  color: var(--orange);
+}
+
+.discoverFilterSection {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 20px;
+}
+
+.discoverFilterSectionLabel {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+.discoverFilterOption {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: none;
+  background: none;
+  padding: 10px 0;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  color: var(--ink);
+  font-family: inherit;
+  border-radius: 6px;
+}
+
+.discoverFilterOption:hover {
+  color: var(--orange);
+}
+
+.discoverFilterOption.active {
+  color: var(--orange);
+  font-weight: 700;
+}
+
+.discoverTypeSelect {
+  width: 100%;
+  padding: 10px 14px;
+  border: 2px solid #828282;
+  border-radius: 10px;
+  font-size: 14px;
+  background: #fff;
+  font-family: inherit;
+  outline: none;
+  cursor: pointer;
+}
+
+.discoverTypeSelect:focus {
+  border-color: var(--orange);
+}
+
+.discoverFilterClear {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  background: none;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  font-family: inherit;
+}
+
+.discoverFilterClear:hover {
+  color: var(--orange);
+}
+
+/* ── Club Detail ── */
+
+.pageBackLink {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  background: none;
+  padding: 0;
+  margin-bottom: 24px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.pageBackLink:hover {
+  color: var(--ink);
+}
+
+.clubDetailLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.clubDetailCard {
+  flex: 1;
+  max-width: 720px;
+  padding: 32px 36px;
+  border-radius: 30px;
+  background: var(--card-bg);
+  box-shadow: 6px 12px 25px rgba(0, 29, 56, 0.1);
+}
+
+.clubDetailHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.clubDetailHeader h1 {
+  margin: 0;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.clubDetailBadges {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.clubDetailBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.clubDetailBadgeIcon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  background-color: var(--ink);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.clubDetailBadgeIconBookmark {
+  -webkit-mask-image: url(/icons/fi-rr-bookmark.svg);
+  mask-image: url(/icons/fi-rr-bookmark.svg);
+}
+
+.clubDetailBadgeIconMembers {
+  -webkit-mask-image: url(/icons/fi-rr-following.svg);
+  mask-image: url(/icons/fi-rr-following.svg);
+}
+
+.clubDetailDescription {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.clubDetailSide {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.clubDetailImage,
+.clubDetailImagePlaceholder {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  object-fit: cover;
+}
+
+.clubDetailImagePlaceholder {
+  background: var(--grey-bg);
+}
+
+.clubDetailJoinButton {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.clubDetailJoinNote {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+  text-align: center;
+}
+
+.clubDetailJoinError {
+  margin: 0;
+  font-size: 13px;
+  color: #d32f2f;
+}
+
+.clubDetailManageButton {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 15px;
+  text-align: center;
+}
+
+/* ── Event Detail ── */
+
+.eventDetailLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  margin-bottom: 48px;
+}
+
+.eventDetailCard {
+  flex: 1;
+  max-width: 720px;
+  padding: 32px 36px;
+  border-radius: 30px;
+  background: var(--card-bg);
+  box-shadow: 6px 12px 25px rgba(0, 29, 56, 0.1);
+}
+
+.eventDetailCard h1 {
+  margin: 0 0 16px;
+  font-size: 30px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.eventDetailDescription {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.eventDetailSide {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 20px;
+  width: 280px;
+  flex-shrink: 0;
+}
+
+.eventDetailSide .statusBadge {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 18px;
+  font-size: 15px;
+}
+
+.eventDetailLeaveButton {
+  width: 100%;
+  padding: 12px 18px;
+  font-size: 15px;
+  text-align: center;
+}
+
+.eventDetailInfoCard {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+  border-radius: 20px;
+  background: var(--card-bg);
+  box-shadow: 6px 12px 25px rgba(0, 29, 56, 0.1);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.eventDetailInfoRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.eventDetailInfoIcon {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  background-color: var(--ink);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.eventDetailInfoIconClub {
+  -webkit-mask-image: url(/icons/fi-rr-backpack.svg);
+  mask-image: url(/icons/fi-rr-backpack.svg);
+}
+
+.eventDetailInfoIconCalendar {
+  -webkit-mask-image: url(/icons/fi-rr-calendar.svg);
+  mask-image: url(/icons/fi-rr-calendar.svg);
+}
+
+.eventDetailInfoIconMarker {
+  -webkit-mask-image: url(/icons/fi-rr-marker.svg);
+  mask-image: url(/icons/fi-rr-marker.svg);
+}
+
+.eventDetailInfoIconMembers {
+  -webkit-mask-image: url(/icons/fi-rr-following.svg);
+  mask-image: url(/icons/fi-rr-following.svg);
+}
+
+.attendeeCardList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.attendeeCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 24px;
+  border-radius: 20px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.attendeeAvatar {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: #ffcfd1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.attendeeHostBadge {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: var(--orange-bg);
+  color: var(--orange);
+  font-size: 10px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.attendeeName {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+/* ── News ── */
+
+.newsCardList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.newsCard {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 900px;
+  padding: 28px 32px;
+  border-radius: 24px;
+  background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+.newsCardInfo {
+  flex: 1 1 auto;
+}
+
+.newsCardMeta {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.newsCardInfo h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.newsCardBody {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.newsCardButton {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+/* ── Profile page ── */
+
+.profilePageLayout {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+}
+
+.profileAvatarLarge {
+  position: relative;
+  width: 220px;
+  height: 220px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  background: #ffd6d6;
+  overflow: hidden;
+}
+
+.profileAvatarLarge img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profileAvatarEditButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.profileAvatarEditButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profilePencilIcon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background-color: var(--muted);
+  -webkit-mask-image: url(/icons/fi-rr-pencil.svg);
+  mask-image: url(/icons/fi-rr-pencil.svg);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+
+.profileFieldsList {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 480px;
+}
+
+.profileField {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.profileFieldLabel {
+  white-space: nowrap;
+}
+
+.profileFieldValue {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profileFieldEditButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 4px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.profileFieldInput {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 12px;
+  border: 1.5px solid #e0e0e0;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: inherit;
+  outline: none;
+}
+
+.profileFieldInput:focus {
+  border-color: var(--orange);
+}
+
+.profileFieldSaveButton,
+.profileFieldCancelButton {
+  border: none;
+  background: none;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.profileFieldSaveButton {
+  color: var(--orange);
+}
+
+.profileFieldCancelButton {
+  color: var(--muted);
+}
+
+.profileFieldSaveButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.profileActions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.deleteProfileButton {
+  border: 1.5px solid var(--orange);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--orange);
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 /* ── Login ── */
 
 .loginPage {
   flex: 1;
-  margin-left: 90px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -750,8 +1528,8 @@ a {
   width: 100%;
   max-width: 380px;
   background: var(--card-bg);
-  border: 1.5px solid #e0e0e0;
   border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   padding: 36px 40px 40px;
 }
 
@@ -914,7 +1692,7 @@ a {
 
 .homePage {
   width: min(1180px, calc(100vw - 130px));
-  margin-left: 190px;
+  margin-left: 40px;
   padding-top: 60px;
   padding-bottom: 80px;
 }
@@ -925,9 +1703,9 @@ a {
   align-items: flex-start;
   gap: 12px;
   padding: 32px;
-  border: 2px solid var(--border);
   border-radius: 20px;
   background: var(--card-bg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
   margin-bottom: 40px;
 }
 
@@ -947,8 +1725,8 @@ a {
 
 @media (max-width: 1100px) {
   .homePage {
-    margin-left: 110px;
-    width: calc(100vw - 140px);
+    margin-left: 40px;
+    width: calc(100vw - 80px);
   }
 }
 
@@ -1066,6 +1844,19 @@ a {
 .formField textarea:focus,
 .formField select:focus {
   border-color: var(--orange);
+}
+
+.formFieldCheckbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 0;
+  cursor: pointer;
+}
+
+.formFieldCheckbox input[type="checkbox"] {
+  width: auto;
+  padding: 0;
 }
 
 .imageDropzone {
@@ -1211,105 +2002,6 @@ a {
 
 /* ── Profile modal ── */
 
-.profileModal {
-  width: 100%;
-  max-width: 360px;
-  background: var(--card-bg);
-  border-radius: 24px;
-  padding: 28px 28px 18px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
-  position: relative;
-}
-
-.profileModalClose {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  border: none;
-  background: none;
-  color: var(--muted);
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.profileModalClose:hover {
-  color: var(--ink);
-}
-
-.profileModalHeader {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.profileModalAvatar {
-  width: 64px;
-  height: 64px;
-  flex-shrink: 0;
-  border-radius: 16px;
-  background: #ffcfd1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: 800;
-  color: var(--ink);
-}
-
-.profileModalIdentity {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.profileModalName {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.profileModalStatus {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.profileModalDot {
-  width: 10px;
-  height: 10px;
-  border-radius: 999px;
-  background: var(--green);
-}
-
-.profileModalMenu {
-  display: flex;
-  flex-direction: column;
-}
-
-.profileModalRow {
-  width: 100%;
-  text-align: left;
-  padding: 14px 0;
-  border: none;
-  border-top: 1px solid #e0e0e0;
-  background: none;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
-  cursor: default;
-}
-
-.profileModalLogout {
-  cursor: pointer;
-}
-
-.profileModalLogout:hover {
-  color: var(--orange);
-}
-
 .profileModalLangOption {
   border: none;
   background: none;
@@ -1322,13 +2014,6 @@ a {
 
 .profileModalLangOption.active {
   color: var(--orange);
-}
-
-.profileModalToggleRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: default;
 }
 
 .profileModalToggle {
@@ -1362,4 +2047,384 @@ a {
 
 .profileModalToggle.on .profileModalToggleKnob {
   transform: translateX(20px);
+}
+
+.modalOverlay {
+  padding: 16px;
+}
+
+/* ── Mobile adaptation ── */
+
+@media (max-width: 640px) {
+  .sidebar,
+  .sidebar.expanded {
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    height: 76px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    border-right: none;
+    border-top: 2px solid var(--border);
+    background: var(--orange-bg);
+  }
+
+  .navItem .sidebarIcon {
+    width: 42px !important;
+    height: 42px !important;
+  }
+
+  .navItem .profileAvatar {
+    width: 54px;
+    height: 54px;
+  }
+
+  .collapseButton {
+    display: none;
+  }
+
+  .mainNav,
+  .bottomNav,
+  .sidebar.expanded .mainNav,
+  .sidebar.expanded .bottomNav {
+    display: contents;
+  }
+
+  .navItem,
+  .sidebar.expanded .navItem {
+    display: grid;
+    place-items: center;
+    padding: 0;
+    gap: 0;
+  }
+
+  .navItem .navLabel,
+  .sidebar.expanded .navItem .navLabel {
+    display: none;
+  }
+
+  .navClubs { order: 1; }
+  .navEvents { order: 2; }
+  .navHome { order: 3; }
+  .navNews { order: 4; }
+  .navLocations { order: 5; }
+  .profileItem { order: 6; }
+
+  .sidebarOverlay {
+    display: none;
+  }
+
+  .appShell {
+    flex-direction: column;
+  }
+
+  .dashboard,
+  .homePage {
+    width: 100%;
+    margin-left: 0;
+    padding: 28px 20px 110px;
+  }
+
+  .loginPage {
+    margin-left: 0;
+    padding: 0 20px;
+    padding-bottom: 110px;
+  }
+
+  .siteFooter {
+    display: none;
+  }
+
+  .myClubsHeader h1,
+  .sectionBlock h1,
+  .sectionTitleRow h1 {
+    font-size: 24px;
+  }
+
+  .homeHero {
+    padding: 22px;
+  }
+
+  .homeHero h1 {
+    font-size: 24px;
+  }
+
+  /* Next event + proposal cards: stack instead of side-by-side */
+
+  .nextEventCard,
+  .proposalCard {
+    flex-direction: column;
+    gap: 16px;
+    padding: 18px;
+  }
+
+  .nextEventActions {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+
+  .proposalActions {
+    width: 100%;
+    min-width: 0;
+    align-items: stretch;
+  }
+
+  /* Approval queue table: stack each row's columns */
+
+  .approvalQueueHeader {
+    display: none;
+  }
+
+  .approvalQueueRow {
+    grid-template-columns: 1fr;
+    row-gap: 4px;
+    padding: 14px 0;
+    min-height: 0;
+  }
+
+  /* My Clubs dashboard widget: full-width single column */
+
+  .clubCard {
+    width: 100%;
+  }
+
+  /* My Clubs page cards */
+
+  .myClubCard {
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .myClubImage,
+  .myClubImagePlaceholder {
+    width: 72px;
+    height: 72px;
+  }
+
+  .myClubInfo h2 {
+    font-size: 18px;
+  }
+
+  .myClubActions {
+    min-height: 0;
+  }
+
+  /* Club detail page */
+
+  .clubDetailLayout {
+    flex-direction: column-reverse;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .clubDetailCard {
+    padding: 22px;
+    max-width: 100%;
+  }
+
+  .clubDetailHeader h1 {
+    font-size: 22px;
+  }
+
+  .clubDetailSide {
+    width: 100%;
+  }
+
+  .clubDetailImage,
+  .clubDetailImagePlaceholder {
+    aspect-ratio: 16 / 9;
+  }
+
+  /* Event detail page */
+
+  .eventDetailLayout {
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .eventDetailCard {
+    padding: 22px;
+    max-width: 100%;
+  }
+
+  .eventDetailCard h1 {
+    font-size: 22px;
+  }
+
+  .eventDetailSide {
+    width: 100%;
+  }
+
+  /* News page cards */
+
+  .newsCard {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 20px;
+    max-width: 100%;
+  }
+
+  .newsCardButton {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Profile page */
+
+  .profilePageLayout {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .profileFieldsList {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .profileField {
+    flex-wrap: wrap;
+    font-size: 17px;
+  }
+
+  /* My Events page cards — matches the Figma mobile reference */
+
+  .eventCard {
+    padding: 20px;
+    gap: 16px;
+    border-radius: 15px;
+  }
+
+  .eventCardInfo h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  .eventCardInfo p {
+    font-size: 13px;
+  }
+
+  .eventCardActions {
+    gap: 14px;
+    min-height: 0;
+  }
+
+  .eventOrganizerBadge {
+    font-size: 11px;
+    padding: 3px 10px;
+  }
+
+  .eventViewDetailButton {
+    font-size: 13px;
+    padding: 6px 14px;
+    border-radius: 8px;
+  }
+
+  /* Desktop/mobile-only utility toggle */
+
+  .desktopOnly {
+    display: none !important;
+  }
+
+  .mobileOnly {
+    display: inline-flex !important;
+  }
+
+  /* Upcoming/Open events: cards instead of a bordered table — matches the Figma "Event_card_Mobile" reference */
+
+  .eventsTable {
+    max-width: 100%;
+    border: none;
+    background: transparent;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .eventRow {
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+    align-items: end;
+    column-gap: 12px;
+    row-gap: 7px;
+    padding: 20px;
+    border: none;
+    border-bottom: none;
+    border-radius: 15px;
+    background: var(--card-bg);
+    box-shadow: 4px 8px 10px 0 rgba(0, 29, 56, 0.15);
+  }
+
+  .eventNameCell {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .eventNameCell h3 {
+    font-size: 18px;
+  }
+
+  .eventNameCell p {
+    display: none;
+  }
+
+  .eventDateCell,
+  .eventLocationCell {
+    grid-column: 1;
+    flex-direction: row;
+    gap: 4px;
+  }
+
+  .eventDateCell {
+    grid-row: 2;
+  }
+
+  .eventLocationCell {
+    grid-row: 3;
+  }
+
+  .eventDateCell strong,
+  .eventDateCell span,
+  .eventLocationCell strong,
+  .eventLocationCell span {
+    font-size: 14px;
+    font-weight: 500;
+    line-height: normal;
+    color: var(--ink);
+  }
+
+  .eventDateCell span::before,
+  .eventLocationCell span::before {
+    content: "· ";
+  }
+
+  .eventStatusCell {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    align-self: end;
+    justify-content: flex-end;
+  }
+
+  .eventStatusCell .statusBadge {
+    min-width: 0;
+    min-height: 0;
+    padding: 9px 18px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  /* Modals: keep clear of the fixed bottom nav bar */
+
+  .modalOverlay {
+    align-items: flex-start;
+    padding-top: 60px;
+    padding-bottom: 96px;
+    overflow-y: auto;
+  }
 }
