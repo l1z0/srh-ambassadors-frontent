@@ -12,6 +12,29 @@ function authHeaders(userToken?: string | null): HeadersInit {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+async function populateOtherLocale(
+  endpoint: string,
+  data: Record<string, unknown>,
+  currentLocale: string,
+  token?: string | null,
+): Promise<void> {
+  const otherLocale = currentLocale === "en" ? "de" : "en";
+  const cleanData = Object.fromEntries(Object.entries(data).filter(([, v]) => v !== undefined));
+  try {
+    const res = await fetch(`${STRAPI_URL}${endpoint}?locale=${otherLocale}`, {
+      method: "PUT",
+      headers: { ...authHeaders(token), "Content-Type": "application/json" },
+      body: JSON.stringify({ data: cleanData }),
+    });
+    if (!res.ok) {
+      const body = await res.text().catch(() => "");
+      console.warn(`[i18n] Failed to populate ${otherLocale} locale for ${endpoint}: ${res.status}${body ? ` — ${body}` : ""}`);
+    }
+  } catch (err) {
+    console.warn(`[i18n] Network error populating ${otherLocale} locale for ${endpoint}:`, err);
+  }
+}
+
 export type StrapiEvent = {
   id: number;
   documentId: string;
@@ -238,7 +261,14 @@ export async function createClub(
   }
 
   const json = await res.json();
-  return json.data;
+  const club: StrapiClub = json.data;
+  await populateOtherLocale(
+    `/api/clubs/${club.documentId}`,
+    { clubName: input.clubName, clubDescription: input.clubDescription, clubType: input.clubType, clubPicture: input.clubPictureId },
+    locale,
+    token,
+  );
+  return club;
 }
 
 export async function getEvents(
@@ -354,7 +384,14 @@ export async function createEvent(
   }
 
   const json = await res.json();
-  return json.data;
+  const event: StrapiEvent = json.data;
+  await populateOtherLocale(
+    `/api/events/${event.documentId}`,
+    { eventName: input.eventName, eventDate: input.eventDate, eventDescription: input.eventDescription, membersOnly: input.membersOnly, club: input.clubId, location: input.locationId },
+    locale,
+    token,
+  );
+  return event;
 }
 
 export type StrapiLocation = {
@@ -407,7 +444,14 @@ export async function createLocation(
   }
 
   const json = await res.json();
-  return json.data;
+  const location: StrapiLocation = json.data;
+  await populateOtherLocale(
+    `/api/locations/${location.documentId}`,
+    { locationName: input.locationName, capacity: input.capacity, locationType: input.locationType, locationDescription: input.locationDescription },
+    locale,
+    token,
+  );
+  return location;
 }
 
 export const NEWS_CATEGORIES = ["club", "event", "website", "miscellaneous"] as const;
@@ -477,15 +521,23 @@ export async function createNewsArticle(
   }
 
   const json = await res.json();
-  return json.data;
+  const article: StrapiNewsArticle = json.data;
+  await populateOtherLocale(
+    `/api/news-articles/${article.documentId}`,
+    { Title: input.Title, Article: input.Article, category: input.category, membersOnly: input.membersOnly, club: input.clubId },
+    locale,
+    token,
+  );
+  return article;
 }
 
 export async function updateLocation(
   documentId: string,
   input: LocationInput,
   token?: string | null,
+  locale: string = "en",
 ): Promise<StrapiLocation> {
-  const res = await fetch(`${STRAPI_URL}/api/locations/${documentId}`, {
+  const res = await fetch(`${STRAPI_URL}/api/locations/${documentId}?locale=${locale}`, {
     method: "PUT",
     headers: { ...authHeaders(token), "Content-Type": "application/json" },
     body: JSON.stringify({ data: input }),
@@ -497,5 +549,12 @@ export async function updateLocation(
   }
 
   const json = await res.json();
-  return json.data;
+  const location: StrapiLocation = json.data;
+  await populateOtherLocale(
+    `/api/locations/${documentId}`,
+    { locationName: input.locationName, locationDescription: input.locationDescription },
+    locale,
+    token,
+  );
+  return location;
 }

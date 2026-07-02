@@ -42,7 +42,7 @@ export default function LocationFormModal({ location, onClose, onSaved }: Props)
         locationDescription: locationDescription.trim() || undefined,
       };
       if (isEditing) {
-        await updateLocation(location!.documentId, input, token);
+        await updateLocation(location!.documentId, input, token, locale);
       } else {
         await createLocation(input, token, locale);
       }

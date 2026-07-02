@@ -139,9 +139,6 @@ export default function ProposeClubModal({ onClose, onCreated }: Props) {
         {error && <p className="loginError">{error}</p>}
 
         <div className="modalActions">
-          <button type="button" className="saveDraftButton" disabled title="Drafts aren't supported yet">
-            {t("proposeClub.saveDraft")}
-          </button>
           <button type="button" className="publishButton" onClick={handlePublish} disabled={submitting}>
             {submitting ? t("proposeClub.submitting") : t("proposeClub.publish")}
           </button>
